@@ -113,6 +113,10 @@ def make_header(prgrom, prgram, prgnvram, chrrom, chrram, chrnvram, miscrom, con
 	header[5] = make_rom_byte(chrrom, 8192, nes2)
 	header[6] = ((pcbBattery << 1) | mirrornibble | (0x4 if trainer > 0 else 0) | ((pcbMapper & 0xF) << 4))
 	header[7] = ((0x8 if nes2 else 0) | (3 if consoleType >= 3 else consoleType) | (pcbMapper & 0xF0))
+	
+	if not nes2:
+		header[9] = ((consoleRegion & 0x03) if consoleRegion < 2 else 0)
+	
 	if nes2:
 		header[8] = (((pcbMapper & 0xF00) >> 8) | ((pcbSubMapper & 0xF) << 4))
 		header[9] = (make_rom_nibble(prgrom, 16384) | (make_rom_nibble(chrrom, 8192) << 4))
